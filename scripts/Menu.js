@@ -23,5 +23,3 @@ function showHighScoreTable() {
 function exitGame() {
     alert("exitGame");
 }
-
-// let loadDOM = document.addEventListener("DOMContentLoaded", );
