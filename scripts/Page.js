@@ -8,11 +8,22 @@ class Page {
     constructor() {
     }
 
-    initialize(controller, view, container) {
+    getContainer() {
+        return this.#container;
+    }
+
+    initialize(controller, view) {
         this.#controller = controller;
         this.#view = view;
-        this.#container = container;
+        this.#createContainer();
         this.#showBackground();
+    }
+
+    #createContainer() {
+        this.#container = document.createElement("div");
+        this.#container.setAttribute("id", "container");
+        this.#container.className = "container";
+        document.body.append(this.#container);
     }
 
     #showBackground() {
@@ -33,7 +44,7 @@ class PageController {
     #DOMElement = null;
 
     // #pageEventListener;
-    #SPAState = {};
+    // #SPAState = {};
 
     constructor() {
         // this.#pageEventListener = window.addEventListener("onhashchange", this.switchToStateFromURLHash);
@@ -44,18 +55,18 @@ class PageController {
         this.#DOMElement = DOMElement;
     }
 
-    switchToStateFromURLHash() {
-        let URLHash = window.location.hash;
-        let state = URLHash.substring(1);
-
-        if (state) {
-            this.#SPAState.pagename = state;
-        } else {
-            this.#SPAState.pagename = "main_menu";
-
-        }
-
-    }
+    // switchToStateFromURLHash() {
+    //     let URLHash = window.location.hash;
+    //     let state = URLHash.substring(1);
+    //
+    //     if (state) {
+    //         this.#SPAState.pagename = state;
+    //     } else {
+    //         this.#SPAState.pagename = "main_menu";
+    //
+    //     }
+    //
+    // }
 
 }
 
