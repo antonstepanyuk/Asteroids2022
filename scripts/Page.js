@@ -1,114 +1,110 @@
 "use strict";
 
 class Page {
-    #view = null;
-    #controller = null;
-    #container = null;
+    #viewObj = null;
+    #controllerObj = null;
+    #containerDOM = null;
+    #currentHashStr = null;
+    #spaceObj = null;
+    #pageHashes=
+        {
+            menu:"MENU",
+        };
 
     constructor() {
     }
 
-    getContainer() {
-        return this.#container;
-    }
-
-    initialize(controller, view) {
-        this.#controller = controller;
-        this.#view = view;
-        this.#createContainer();
+    initialize() {
+        this.#createContainerDOM();
+        this.#viewObj = new PageView(this, this.#containerDOM);
+        this.#controllerObj = new PageController(this, this.#containerDOM);
+        this.#spaceObj = new Space();
         this.#showBackground();
+        this.switchPageSection();
     }
 
-    #createContainer() {
-        this.#container = document.createElement("div");
-        this.#container.setAttribute("id", "container");
-        this.#container.className = "container";
-        document.body.append(this.#container);
+    #createContainerDOM() {
+        this.#containerDOM = document.createElement("div");
+        this.#containerDOM.setAttribute("id", "container");
+        this.#containerDOM.className = "container";
+        document.body.append(this.#containerDOM);
     }
 
     #showBackground() {
-        let space = new Space(this.#container);
-        space.showStars();
+        this.#viewObj.showBackground(this.#spaceObj);
     }
 
-    // #updateView() {
-    //     if (this.#view) {
-    //         this.#view.update();
-    //     }
-    // }
+    switchPageSection() {
+        let urlHashStr = window.location.hash;
+        let newHashStr = urlHashStr.substring(1);
+        console.log(`пытаюсь перейти на "${newHashStr}"`)
+
+        if (newHashStr === this.#currentHashStr) {
+            console.log(`тот же хэш новый ${newHashStr} и старый ${this.#currentHashStr}`)
+            return;
+        }
+        if (newHashStr in this.#pageHashes) {
+            this.#currentHashStr = newHashStr;
+            console.log(`перехожу на "${newHashStr}"`)
+        } else {
+            this.#currentHashStr = this.#pageHashes.menu  ;
+            console.log(`перехожу на "${this.#currentHashStr}"`)
+        }
+        this.#viewObj.showPageSection(this.#currentHashStr);
+    }
 
 }
 
 class PageController {
-    #model = null;
-    #DOMElement = null;
+    #modelObj = null;
+    #elementDOM = null;
 
-    // #pageEventListener;
-    // #SPAState = {};
-
-    constructor() {
-        // this.#pageEventListener = window.addEventListener("onhashchange", this.switchToStateFromURLHash);
+    constructor(modelObj, elementDOM) {
+        this.#modelObj = modelObj;
+        this.#elementDOM = elementDOM;
+        window.addEventListener("hashchange", this.#modelObj.switchPageSection.bind(this.#modelObj));
     }
-
-    initialize(model, DOMElement) {
-        this.#model = model;
-        this.#DOMElement = DOMElement;
-    }
-
-    // switchToStateFromURLHash() {
-    //     let URLHash = window.location.hash;
-    //     let state = URLHash.substring(1);
-    //
-    //     if (state) {
-    //         this.#SPAState.pagename = state;
-    //     } else {
-    //         this.#SPAState.pagename = "main_menu";
-    //
-    //     }
-    //
-    // }
 
 }
-
 
 class PageView {
-    #model = null; // с какой моделью работаем
-    #DOMElement = null; // внутри какого элемента DOM наша вёрстка
+    #modelObj = null;
+    #elementDOM = null;
 
-    constructor() {
+    constructor(modelObj, elementDOM) {
+        this.#modelObj = modelObj;
+        this.#elementDOM = elementDOM;
     }
 
-    initialize(model, DOMElement) {
-        this.#model = model;
-        this.#DOMElement = DOMElement;
+    showBackground(spaceObj) {
+        this.#elementDOM.append(spaceObj.getSpaceContainerDOM());
     }
 
-    // updatePage(state) {
-    //     switch (state) {
-    //         case "main_menu":
-    //             let element = document.getElementById(state);//todo
-    //             break;
-    //     }
-    //     location.hash = state;
-    // }
+    showPageSection(hashStr) {
+        // location.hash=hashStr;
+        switch (hashStr) {
+            case "111":
+                console.log("перешел 111");
+                break;
+            case "222":
+                console.log("перешел 222");
+                break;
+            default:
+                console.log(`перешел на "${hashStr}"`)
+                break;
+        }
+    }
 }
 
-
-// function switchToMainPage() {
-//     switchToState({pagename: 'Main'});
-// }
 //
-// function switchToPhotoPage(photoId) {
-//     switchToState({pagename: 'Photo', photoid: photoId});
-// }
+// class PageView {
+//         ;
+//     }
 //
-// function switchToAboutPage() {
-//     switchToState({pagename: 'About'});
+//
+//
+//
+//     }
 // }
 
-// переключаемся в состояние, которое сейчас прописано в закладке УРЛ
-// switchToStateFromURLHash();
-
-
-// man.updateView();
 

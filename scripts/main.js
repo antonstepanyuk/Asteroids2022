@@ -1,14 +1,16 @@
 "use strict";
 
-let page = new Page();
-let pageController = new PageController();
-let pageView = new PageView();
-
-let container=document.getElementById("container");
-
-page.initialize(pageController,pageView);
-pageController.initialize(page,page.getContainer());
-pageView.initialize(page,page.getContainer());
-
-let menu=new Menu(page.getContainer());
-menu.showMenu();
+let pageObj = new Page();
+pageObj.initialize();
+// let pageControllerObj = new PageController();
+// let pageViewObj = new PageView();
+//
+// pageObj.initialize(pageControllerObj,pageViewObj);
+// pageControllerObj.initialize(pageObj,pageObj.getContainerDOM());
+// pageViewObj.initialize(pageObj,pageObj.getContainerDOM());
+//
+// pageObj.info();
+// pageObj.controllerObj.info();
+// pageObj.viewObj.info();
+// window.onhashchange=pageViewObj;
+// location.hash="Menu";
