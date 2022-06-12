@@ -10,15 +10,19 @@ class Space {
         min: 5,
         max: 15,
     }
-    #container;
-    starClassName = "star";
-    spaceClassName = "space"
+    #spaceContainerDOM=null;
+    starClassNameStr = "star";
+    spaceClassNameStr = "space";
 
-    constructor(container) {
-        this.#container = container;
+    constructor() {
+        this.#createSpace();
     }
 
-    showStars() {
+    getSpaceContainerDOM(){
+        return this.#spaceContainerDOM;
+    }
+
+    #createSpace() {
         function getRandomIntInclusive(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -29,12 +33,12 @@ class Space {
             return Math.random() * (max - min) + min;
         }
 
-        let space = document.createElement("div");
-        space.className = this.spaceClassName;
+        this.#spaceContainerDOM = document.createElement("div");
+        this.#spaceContainerDOM.className = this.spaceClassNameStr;
 
         for (let i = 0; i < this.amount; i++) {
             let star = document.createElement("div");
-            star.className = this.starClassName;
+            star.className = this.starClassNameStr;
             let size = getRandomIntInclusive(this.size.min, this.size.max);
             star.style.cssText = `
                 width: ${size}px;
@@ -43,8 +47,7 @@ class Space {
                 top: ${getRandomArbitrary(0, 100)}%;
                 box-shadow: 0 0 ${size}px ${size / 2}px #023c5d;
                 animation-duration: ${getRandomIntInclusive(this.duration.min, this.duration.max)}s;`;
-            space.append(star);
+            this.#spaceContainerDOM.append(star);
         }
-        this.#container.append(space);
     }
 }
