@@ -1,38 +1,28 @@
 "use strict";
 
+window.addEventListener("load", () => console.log("window loaded Space"));
+document.addEventListener("DOMContentLoaded", () => console.log("DOMContentLoaded Space"));
+
 console.log("Space.js: начато чтение файла");//todo
-class Space {
-    #controllerObj = null;
-    #viewObj = null;
-    // #pageContainerDOM = document.body;
-    #containerDOM = null;
-    #starClassNameStr = "star";
-    #spaceClassNameStr = "space";
-    #amount = 200;
-    #size = {
-        min: 1,
-        max: 8
-    }
-    #duration = {
-        min: 5,
-        max: 15,
-    }
 
-    constructor() {
-        console.log("Space: вызван конструктор");//todo
-        this.#createContainerDOM();
-        this.#viewObj = new SpaceView(this, this.#containerDOM);
-        this.#controllerObj = new SpaceController(this, this.#containerDOM);
-        console.log("Space: отработал конструктор");//todo
-    }
+function Space() {
+    console.log("Space: вызван конструктор");//todo
+    let self = this;
 
-    // getPageContainerDOM() {
-    //     console.log("Space: запрошен containerDOM");//todo
-    //     return this.#pageContainerDOM;
-    // }
-
-    #createContainerDOM() {
+    let createContainerDOM = function () {
         console.log("Space: начато создание и наполнение containerDOM");//todo
+        let amount = 200;
+        let size = {
+            min: 1,
+            max: 8
+        };
+        let duration = {
+            min: 5,
+            max: 15,
+        };
+        let starClass = "star";
+        let spaceClass = "space";
+
         function getRandomIntInclusive(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -43,77 +33,68 @@ class Space {
             return Math.random() * (max - min) + min;
         }
 
-        this.#containerDOM = document.createElement("div");
+        let container = document.createElement("div");
         console.log("Space: создан containerDOM");//todo
-        this.#containerDOM.className = this.#spaceClassNameStr;
+        container.className = spaceClass;
         console.log("Space: наполняется containerDOM");//todo
-        for (let i = 0; i < this.#amount; i++) {
+        for (let i = 0; i < amount; i++) {
             let star = document.createElement("div");
-            star.className = this.#starClassNameStr;
-            let size = getRandomIntInclusive(this.#size.min, this.#size.max);
+            star.className = starClass;
+            let starSize = getRandomIntInclusive(size.min, size.max);
             star.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
+                width: ${starSize}px;
+                height: ${starSize}px;
                 left: ${getRandomArbitrary(0, 100)}%;
                 top: ${getRandomArbitrary(0, 100)}%;
-                box-shadow: 0 0 ${size}px ${size / 2}px #023c5d;
-                animation-duration: ${getRandomIntInclusive(this.#duration.min, this.#duration.max)}s;`;
-            this.#containerDOM.append(star);
+                box-shadow: 0 0 ${starSize}px ${starSize / 2}px #023c5d;
+                animation-duration: ${getRandomIntInclusive(duration.min, duration.max)}s;`;
+            container.append(star);
         }
         console.log("Space: оконченно создание и наполнение containerDOM");//todo
+        return container;
+    }
+    self.showSpace = function () {
+        console.log("Space:  запрошено отображение containerDOM");//todo
+        viewObj.showSpace();
     }
 
-    showSpace() {
-        console.log("Space:  запрошено отображение containerDOM");//todo
-        this.#viewObj.showSpace();
-    }
+    let containerDOM = createContainerDOM();
+    let viewObj = new SpaceView(self, containerDOM);
+    let controllerObj = new SpaceController(self, containerDOM);
+
+    console.log("Space: отработал конструктор");//todo
 }
 
-class SpaceView {
-    #modelObj = null;
-    #containerDOM = null;
+function SpaceView(modelObj, containerDOM) {
+    console.log("SpaceView: вызван конструктор");//todo
+    let self = this;
 
-    constructor(modelObj, containerDOM) {
-        console.log("SpaceView: вызван конструктор");//todo
-        this.#modelObj = modelObj;
-        this.#containerDOM = containerDOM;
-        console.log("SpaceView: отработал конструктор");//todo
-    }
-
-    showSpace() {
-        // this.#spaceObj.getPageContainerDOM().append(this.#containerDOM);
-       document.body.append(this.#containerDOM);
+    self.showSpace = function () {
+        document.body.append(containerDOM);
         console.log("SpaceView: containerDOM подключен к DOM ");//todo
     }
+    console.log("SpaceView: отработал конструктор");//todo
 }
 
-class SpaceController {
-    #modelObj = null;
-    #containerDOM = null;
+function SpaceController(modelObj, containerDOM) {
+    console.log("SpaceController: вызван конструктор");//todo
+    let self = this;
 
-    constructor(modelObj, containerDOM) {
-        console.log("SpaceController: вызван конструктор");//todo
-        this.#modelObj = modelObj;
-        this.#containerDOM = containerDOM;
-        this.#showSpace();
-        console.log("SpaceController: отработал конструктор");//todo
-    }
-
-    #showSpace(){
+    let showSpace = function () {
         console.log("SpaceController: запрашивается отображение containerDOM");//todo
-        if (document.readyState == 'loading') {
+        if (document.readyState === 'loading') {
             // ещё загружается, ждём события//todo
             console.log("SpaceController: устанавливается событие DOMContentLoaded");//todo
-            document.addEventListener('DOMContentLoaded', this.#modelObj.showSpace());
+            document.addEventListener('DOMContentLoaded', modelObj.showSpace);
         } else {
             // DOM готов!//todo
             console.log("SpaceController: DOMContentLoaded, запрашивается отображение");//todo
-            this.#modelObj.showSpace()
+            modelObj.showSpace();
         }
     }
+    showSpace();
+    console.log("SpaceController: отработал конструктор");//todo
 }
-
-
 
 
 let spaceObj = new Space();
