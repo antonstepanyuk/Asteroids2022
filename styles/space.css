@@ -8,13 +8,13 @@
 
 .star {
     position: absolute;
-    background: radial-gradient(ellipse at center, rgb(238, 120, 162) 2%, rgba(5, 63, 118, 1) 100%);
+    background: radial-gradient(ellipse at center, rgb(238, 120, 162) 2%, rgba(5, 63, 118, 1) 100%);/*!!!!!!!!!!!!!!todo*/
     border-radius: 50%;
     filter: blur(1px);
-    animation: shine infinite alternate;
+    animation: starShine infinite alternate;
 }
 
-@keyframes shine {
+@keyframes starShine {
     0% {
         transform: scale(1);
         opacity: 1;
