@@ -6,10 +6,47 @@ function Page() {
     console.log("Page: вызван конструктор");//todo
     let self = this;
     let container = document.body;
+    let currentState = "";
+    let states = {//todo is mobile orientation
+        main_menu: "main_menu",//todo start,options,controls,scores,credits,exit
+        game_start: "game_start",//todo mode,skins,return, play, new game, saves, username
+        options: "options",//todo sounds,music,vibration,fullscreen, return
+        controls: "controls",//todo show controls, change, mobile controls
+        high_scores: "high_scores",//todo table select user
+        game: "game",//todo score,lives,ships,audio,asteroids,laser
+        game_menu: "game_menu"//todo game menu
+        //todo PAGE EXITS!!!!!
 
+    };
 
-    let viewObj = new PageView(self, container);
-    let controllerObj = new PageController(self, container);
+    self.switchState = function (newState) {
+        window.location.hash = newState;
+        console.log("Page: преключен state на " + newState);//todo
+    }
+
+    self.updateState = function () {
+        console.log("Page: запрошено обновление состояния");//todo
+        let hash = window.location.hash;
+        let state = hash.substring(1);
+        if (!state) {
+            console.log("Page: state пустой, переход в main_menu");//todo
+            self.switchState(states.main_menu);
+        } else if (state in states) {
+            currentState = state;
+            view.showState(currentState);
+            console.log("Page: state корректный, запрошено отображение " + currentState);//todo
+        } else {
+            self.switchState(currentState);
+            console.log("Page: state некорректный, выполняется переход на текущий state "+currentState);//todo
+        }
+    }
+
+    self.showState = function (state) {
+        view.showState(state);
+    }
+
+    let view = new PageView(self, container);
+    let controller = new PageController(self, container);
     console.log("Page: отработал конструктор");//todo
 }
 
@@ -19,8 +56,13 @@ function PageView(modelObj, containerDOM) {
     let model = modelObj;
     let container = containerDOM;
 
+    self.showState = function (state) {
+        switch (state) {
+            case "":
+                break;
+        }
+    }
     console.log("PageView: отработал конструктор");//todo
-
 }
 
 function PageController(modelObj, containerDOM) {
@@ -29,94 +71,14 @@ function PageController(modelObj, containerDOM) {
     let self = this;
     let model = modelObj;
     let container = containerDOM;
+    //         this.#switchToState=modelObj.switchToState().bind(modelObj);
 
+
+    window.addEventListener("hashchange", model.updateState);
+    model.updateState();
     console.log("PageController: отработал конструктор");//todo
 }
 
-// class Page {
-//
-//     constructor() {
-//         this.#pageSwitchedEvent = new Event("page_switched", {bubbles: true});
-//         this.#loadStyle(this.#styleSrc.background)
-//             .then(() => {
-//                 console.log("готовлюсь к загрузке: Space.js")
-//                 this.#loadScript(this.#scriptSrc.background)
-//                     .then(() => {
-//                         this.#backgroundObj = new Space();
-//                         this.#backgroundElementDOM = this.#backgroundObj.getElementDOM();
-//                         this.#viewObj.showElement(this.#backgroundElementDOM);
-//                     }, reject => console.log(reject))
-//             }, reject => console.log(reject));
-//
-//         console.log("готовлюсь к загрузке: menu.css")
-//         this.#loadStyle(this.#styleSrc.menu)
-//             .then(() => {
-//                 console.log("готовлюсь к загрузке: Menu.js")
-//                 this.#loadScript(this.#scriptSrc.menu)
-//                     .then(() => {
-//                         this.#menuObj = new Menu(this.#elementDOM);
-//                     }, reject => console.log(reject))
-//             }, reject => console.log(reject));
-//
-//         console.log("готовлюсь к загрузке: game.css")
-//         this.#loadStyle(this.#styleSrc.game)
-//             .then(() => {
-//                 console.log("готовлюсь к загрузке: Game.js")
-//                 this.#loadScript(this.#scriptSrc.game)
-//                     .then(() => {
-//                         this.#gameObj = new Game();
-//                     }, reject => console.log(reject))
-//             }, reject => console.log(reject));
-//
-//         this.#controllerObj = new PageController(this, this.#elementDOM);
-//         this.#viewObj = new PageView(this, this.#elementDOM);
-//
-//
-//         window.onload = () => this.switchToStateFromURLHash();
-//         console.log("отработал конструктор: Page")
-//
-//     }
-//
-//     getEvent() {
-//         return this.#pageSwitchedEvent;
-//     }
-//
-//     #loadStyle(src) {
-//         return new Promise(function (resolve, reject) {
-//             console.log("загружаю стиль " + src)
-//             let link = document.createElement("link");
-//             link.rel = "stylesheet";
-//             link.type = "text/css";
-//             link.href = src;
-//
-//             link.onload = () => resolve(link);
-//             link.onerror = () => reject(new Error(`Ошибка загрузки стиля ${link}`));
-//
-//             document.head.append(link);//todo
-//             console.log("стиль загружен " + src)
-//         });
-//     }
-//
-//     #loadScript(src) {
-//         console.log("загружаю скрипт " + src)
-//         return new Promise(function (resolve, reject) {
-//             let script = document.createElement("script");
-//             script.type = "text/javascript";
-//             script.src = src;
-//
-//             script.onload = () => resolve(script);
-//             script.onerror = () => reject(new Error(`Ошибка загрузки скрипта ${src}`));
-//
-//             document.head.append(script);
-//             console.log("скрипт загружен " + src)
-//         });
-//     }
-//
-//     switchToState(newHash) {
-//         console.log("переключаю на новое состояние " + newHash)
-//         location.hash = newHash;
-//     }
-//
 //     switchToStateFromURLHash() {
 //         console.log("вызван: switchToStateFromURLHash")
 //         let urlHash = window.location.hash;
@@ -132,52 +94,6 @@ function PageController(modelObj, containerDOM) {
 //             this.#showElement(this.#currentStateStr);
 //         }
 //     }
-//
-//     #showElement(state) {
-//         if(this.#currentElementDOM){
-//             this.#currentElementDOM.remove();
-//         }
-//         console.log("вызван: showElement")
-//         switch (state) {
-//             case "main_menu":
-//                 console.log("готовится к отображению: main_menu")
-//                 this.#menuElementDOM = this.#menuObj.createMenu(state, this.#gameObj);
-//                 this.#currentElementDOM = this.#menuElementDOM;
-//                 // this.#currentElementDOM.dispatchEvent(this.#pageSwitchedEvent);
-//                 break;
-//             case "start_menu":
-//                 console.log("готовится к отображению: start_menu")
-//                 this.#menuElementDOM = this.#menuObj.createMenu(state, this.#gameObj);
-//                 this.#currentElementDOM = this.#menuElementDOM;
-//                 break;
-//             case "game":
-//                 console.log("готовится к отображению: game")
-//                 // this.#viewObj.showElement(this.#gameElementCNVS);
-//                 break;
-//         }
-//         this.#viewObj.showElement(this.#currentElementDOM);
-//         console.log("отправлен на отображение: "+this.#currentElementDOM)
-//     }
-// }
-//
-// class PageController {
-//     #modelObj = null;
-//     #elementDOM = null;
-//     #handlers = {};
-//     #switchToState=null;
-//
-//     constructor(modelObj, containerDOM) {
-//         console.log("вызван конструктор: PageController")
-//         this.#modelObj = modelObj;
-//         this.#elementDOM = containerDOM;
-//
-//         this.#switchToState=modelObj.switchToState().bind(modelObj);
-//
-//         window.addEventListener("hashchange", this.#modelObj.switchToStateFromURLHash.bind(modelObj));
-//         this.#elementDOM.addEventListener("page_switched", this.#switchHandlers.bind(this));
-//         console.log("отработал конструктор: PageController")
-//     }
-//
 //
 //     #switchHandlers(EO) {
 //         console.log("вызван switchHandlers")
@@ -196,9 +112,6 @@ function PageController(modelObj, containerDOM) {
 //                 this.#addMainMenuHandlers();
 //                 break;
 //         }
-//
-//
-//     }
 //
 //     #addMainMenuHandlers() {
 //         console.log("вызван addMainMenuHandlers")
@@ -235,31 +148,9 @@ function PageController(modelObj, containerDOM) {
 //             case  "exit_btn":
 //                 alert("exit_btn")
 //                 break;
-//         }
-//     }
-// }
-//
-// class PageView {
-//     #modelObj = null;
-//     #elementDOM = null;
-//
-//     constructor(modelObj, elementDOM) {
-//         console.log("вызван конструктор: PageView")
-//         this.#modelObj = modelObj;
-//         this.#elementDOM = elementDOM;
-//         console.log("отработал конструктор: PageView")
-//     }
-//
-//     showElement(elementDOM) {
-//         this.#elementDOM.append(elementDOM);
-//         console.log("элемент подключен к html: "+elementDOM)
-//         elementDOM.dispatchEvent(this.#modelObj.getEvent());
-//         console.log("элемент вызвал событие: "+this.#modelObj.getEvent())
-//     }
-// }
 
 let page = new Page();
 
-console.log("Page.js: окончено чтение файла");
+console.log("Page.js: окончено чтение файла");//todo
 
 

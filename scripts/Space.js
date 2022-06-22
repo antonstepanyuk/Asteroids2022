@@ -1,16 +1,14 @@
 "use strict";
 
-window.addEventListener("load", () => console.log("window loaded Space"));
-document.addEventListener("DOMContentLoaded", () => console.log("DOMContentLoaded Space"));
-
 console.log("Space.js: начато чтение файла");//todo
 
 function Space() {
     console.log("Space: вызван конструктор");//todo
     let self = this;
+    let container=document.body;
 
-    let createContainerDOM = function () {
-        console.log("Space: начато создание и наполнение containerDOM");//todo
+    let createSpaceDOM = function () {
+        console.log("Space: начато создание и наполнение container");//todo
         let amount = 200;
         let size = {
             min: 1,
@@ -34,9 +32,9 @@ function Space() {
         }
 
         let container = document.createElement("div");
-        console.log("Space: создан containerDOM");//todo
+        console.log("Space: создан container");//todo
         container.className = spaceClass;
-        console.log("Space: наполняется containerDOM");//todo
+        console.log("Space: наполняется container");//todo
         for (let i = 0; i < amount; i++) {
             let star = document.createElement("div");
             star.className = starClass;
@@ -50,27 +48,28 @@ function Space() {
                 animation-duration: ${getRandomIntInclusive(duration.min, duration.max)}s;`;
             container.append(star);
         }
-        console.log("Space: оконченно создание и наполнение containerDOM");//todo
+        console.log("Space: оконченно создание и наполнение container");//todo
         return container;
     }
     self.showSpace = function () {
-        console.log("Space:  запрошено отображение containerDOM");//todo
-        viewObj.showSpace();
+        console.log("Space:  запрошено отображение container");//todo
+        view.showSpace(spaceDOM);
     }
 
-    let containerDOM = createContainerDOM();
-    let viewObj = new SpaceView(self, containerDOM);
-    let controllerObj = new SpaceController(self, containerDOM);
-
+    let spaceDOM = createSpaceDOM();
+    let view = new SpaceView(self, container);
+    let controller = new SpaceController(self, container);
     console.log("Space: отработал конструктор");//todo
 }
 
 function SpaceView(modelObj, containerDOM) {
     console.log("SpaceView: вызван конструктор");//todo
     let self = this;
+    let model=modelObj;
+    let container=containerDOM;
 
-    self.showSpace = function () {
-        document.body.append(containerDOM);
+    self.showSpace = function (spaceDOM) {
+        container.append(spaceDOM);
         console.log("SpaceView: containerDOM подключен к DOM ");//todo
     }
     console.log("SpaceView: отработал конструктор");//todo
@@ -79,17 +78,19 @@ function SpaceView(modelObj, containerDOM) {
 function SpaceController(modelObj, containerDOM) {
     console.log("SpaceController: вызван конструктор");//todo
     let self = this;
+    let model=modelObj;
+    let container=containerDOM;
 
     let showSpace = function () {
         console.log("SpaceController: запрашивается отображение containerDOM");//todo
         if (document.readyState === 'loading') {
             // ещё загружается, ждём события//todo
             console.log("SpaceController: устанавливается событие DOMContentLoaded");//todo
-            document.addEventListener('DOMContentLoaded', modelObj.showSpace);
+            document.addEventListener('DOMContentLoaded', model.showSpace);
         } else {
             // DOM готов!//todo
             console.log("SpaceController: DOMContentLoaded, запрашивается отображение");//todo
-            modelObj.showSpace();
+            model.showSpace();
         }
     }
     showSpace();
