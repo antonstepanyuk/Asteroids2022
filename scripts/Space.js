@@ -4,7 +4,7 @@ console.log("Space.js: начато чтение файла");//todo
 class Space {
     #controllerObj = null;
     #viewObj = null;
-    #pageContainerDOM = document.body;
+    // #pageContainerDOM = document.body;
     #containerDOM = null;
     #starClassNameStr = "star";
     #spaceClassNameStr = "space";
@@ -26,10 +26,10 @@ class Space {
         console.log("Space: отработал конструктор");//todo
     }
 
-    getPageContainerDOM() {
-        console.log("Space: запрошен containerDOM");//todo
-        return this.#pageContainerDOM;
-    }
+    // getPageContainerDOM() {
+    //     console.log("Space: запрошен containerDOM");//todo
+    //     return this.#pageContainerDOM;
+    // }
 
     #createContainerDOM() {
         console.log("Space: начато создание и наполнение containerDOM");//todo
@@ -70,18 +70,19 @@ class Space {
 }
 
 class SpaceView {
-    #spaceObj = null;
+    #modelObj = null;
     #containerDOM = null;
 
     constructor(modelObj, containerDOM) {
         console.log("SpaceView: вызван конструктор");//todo
-        this.#spaceObj = modelObj;
+        this.#modelObj = modelObj;
         this.#containerDOM = containerDOM;
         console.log("SpaceView: отработал конструктор");//todo
     }
 
     showSpace() {
-        this.#spaceObj.getPageContainerDOM().append(this.#containerDOM);
+        // this.#spaceObj.getPageContainerDOM().append(this.#containerDOM);
+       document.body.append(this.#containerDOM);
         console.log("SpaceView: containerDOM подключен к DOM ");//todo
     }
 }
@@ -94,15 +95,21 @@ class SpaceController {
         console.log("SpaceController: вызван конструктор");//todo
         this.#modelObj = modelObj;
         this.#containerDOM = containerDOM;
-        // this.#showSpace.bind(modelObj);
+        this.#showSpace();
+        console.log("SpaceController: отработал конструктор");//todo
+    }
+
+    #showSpace(){
+        console.log("SpaceController: запрашивается отображение containerDOM");//todo
         if (document.readyState == 'loading') {
             // ещё загружается, ждём события//todo
+            console.log("SpaceController: устанавливается событие DOMContentLoaded");//todo
             document.addEventListener('DOMContentLoaded', this.#modelObj.showSpace());
         } else {
             // DOM готов!//todo
+            console.log("SpaceController: DOMContentLoaded, запрашивается отображение");//todo
             this.#modelObj.showSpace()
         }
-        console.log("SpaceController: отработал конструктор");//todo
     }
 }
 
