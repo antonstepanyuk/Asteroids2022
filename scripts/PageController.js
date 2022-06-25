@@ -5,8 +5,9 @@ function PageController(pageObj, pageContainerDOM) {
     let page = pageObj;
     let pageDOM = pageContainerDOM;
     let handlers = {
-        click:[],
-        touch:[]
+        click: [],
+        touch: [],
+        // change:[]todo
     };
 
     self.startPage = function () {
@@ -23,14 +24,35 @@ function PageController(pageObj, pageContainerDOM) {
         }
     }
 
-    let handleEvent=function (EO){
+    let handleEvent = function (EO) {
         EO = EO.target;
         let id = EO.getAttribute("id");
-        let newState;
-        switch(id){
+
+        let newState=null;
+        let value=null;
+        switch (id) {
             case "start_btn":
-                newState="game_settings";
-                alert("game_settings")//todo
+                newState = "game_settings";
+                page.switchState(newState);
+                break;
+
+            case "easy_btn":
+            case "medium_btn":
+            case "hard_btn":
+                value=EO.value;
+                page.switchMode(value);
+                break;
+            case "spaceship_blue":
+            case "spaceship_green":
+            case "spaceship_orange":
+                value=EO.value;
+                page.switchSkin(value);
+                break;
+            case "play_btn":
+                page.startGame();
+                break;
+            case"return_btn":
+                newState="main_menu";
                 page.switchState(newState);
                 break;
 
@@ -38,26 +60,62 @@ function PageController(pageObj, pageContainerDOM) {
     }
 
 
-
-    let deleteHandlers=function (){
+    let deleteHandlers = function () {
         for (let i = 0; i < handlers.click.length; i++) {
-            handlers.click[i].removeEventListener("click",handleEvent);
+            handlers.click[i].removeEventListener("click", handleEvent);
         }
+        handlers.click=[];
         for (let i = 0; i < handlers.touch.length; i++) {
-            handlers.touch[i].removeEventListener("click",handleEvent);//todo touch
+            handlers.touch[i].removeEventListener("click", handleEvent);//todo touch!!!
         }
+        handlers.touch=[];
+        // for (let i=0;i<handlers.change.length;i++){
+        //     handlers.change[i].removeEventListener("change",handleEvent);//todo CHANGE
+        // }
     }
 
     let setHandlers = function () {
-        let state=page.getCurrentState();
+        let state = page.getCurrentState();
         switch (state) {
             case "main_menu":
-                let start=document.getElementById("start_btn");
-                start.addEventListener("click",handleEvent);
+                let start = document.getElementById("start_btn");
+                start.addEventListener("click", handleEvent);
                 handlers.click.push(start);
+                break;
+            case "game_settings":
+                let easyMode = document.getElementById("easy_btn");
+                easyMode.addEventListener("click",handleEvent);
+                handlers.click.push(easyMode);
+
+                let mediumMode = document.getElementById("medium_btn");
+                mediumMode.addEventListener("click",handleEvent);
+                handlers.click.push(mediumMode);
+
+                let hardMode = document.getElementById("hard_btn");
+                hardMode.addEventListener("click",handleEvent);
+                handlers.click.push(hardMode);
+
+                let blueSkin = document.getElementById("spaceship_blue");
+                blueSkin.addEventListener("click",handleEvent);
+                handlers.click.push(blueSkin);
+
+                let greenSkin = document.getElementById("spaceship_green");
+                greenSkin.addEventListener("click",handleEvent);
+                handlers.click.push(greenSkin);
+
+                let orangeSkin = document.getElementById("spaceship_orange");
+                orangeSkin.addEventListener("click",handleEvent);
+                handlers.click.push(orangeSkin);
+
+                let play=document.getElementById("play_btn");
+                play.addEventListener("click",handleEvent);
+                handlers.click.push(play);
+
+                let back=document.getElementById("return_btn");
+                back.addEventListener("click",handleEvent);
+                handlers.click.push(back);
 
                 break;
-            // case "game_settings":
             // case "options":
             // case "controls"://меняет hash switchState(hash)
             // case "high_scores":
@@ -75,8 +133,7 @@ function PageController(pageObj, pageContainerDOM) {
     }
 
 
-
-    window.addEventListener("load", () => setTimeout(self.startPage, 1000));
+    window.addEventListener("load", () => setTimeout(self.startPage, 100));//todo
     window.addEventListener("hashchange", () => {
         page.updateState();
         setHandlers();

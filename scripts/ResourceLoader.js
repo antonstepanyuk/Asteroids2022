@@ -1,9 +1,8 @@
 "use strict";
 
-console.log("ResourceLoader.js: начато чтение файла");//todo
 function ResourceLoader() {
     let self = this;
-    self.images = {
+    let images = {
         spaceships: {
             full: {
                 spaceship_blue: {
@@ -178,19 +177,18 @@ function ResourceLoader() {
 
         }
     };
-    let tempDiv = document.createElement("div")//todo
-    tempDiv.className = "delete";
+
+    self.getImages=function (){
+        return images;
+    }
 
     let loadImage = function (src) {
         return new Promise(function (resolve, reject) {
-            // console.log("загружаю image " + src)
             let image = document.createElement("img");
             image.src = src;
-// image.style.height="50px"
+
             image.onload = () => resolve(image);
             image.onerror = () => reject(new Error(`Ошибка загрузки изображения ${image}`));
-
-            // console.log("image загружен " + src)
         });
     }
 
@@ -200,8 +198,6 @@ function ResourceLoader() {
                 loadImage(array[key].src)
                     .then(result => {
                         array[key].img = result;
-                        // tempDiv.append(array[key].img);
-                        // console.log("image загружен " + array[key].img+" по пути "+array[key].src)
                     }, reject => console.log(reject));
             } else {
                 loadAllImages(array[key]);
@@ -210,7 +206,7 @@ function ResourceLoader() {
     }
 
     let loadResources = function () {
-        loadAllImages(self.images);
+        loadAllImages(images);
     }
 
 //     audio: {},
@@ -218,7 +214,4 @@ function ResourceLoader() {
 // };
 
     loadResources();
-    // window.onload = () => document.body.append(tempDiv);//todo
 }
-
-console.log("ResourceLoader.js: окончено чтение файла");//todo

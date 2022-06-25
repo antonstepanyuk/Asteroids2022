@@ -7,7 +7,7 @@ function Page() {
     let gameDOM = null;
     let loadingDOM = null;
     let currentState = "";
-    let currentDOM=null;
+    let currentDOM = null;
     let scriptSrc = {
         PageView: "/scripts/PageView.js",
         PageController: "/scripts/PageController.js",
@@ -27,8 +27,8 @@ function Page() {
     let menu = null;
     let game = null;
 
-    let switchEvent= new Event("state_switched", {bubbles: true});
-    let readyToSwitch=new Event("ready_to_switch",{bubbles: true});
+    let switchEvent = new Event("state_switched", {bubbles: true});
+    let readyToSwitch = new Event("ready_to_switch", {bubbles: true});
     // let gameEvent= new Event("game_switched", {bubbles: true});
 
     let states = [//todo is mobile orientation
@@ -43,7 +43,7 @@ function Page() {
 
     ];
 
-    self.getCurrentState=function (){
+    self.getCurrentState = function () {
         return currentState;
     }
 
@@ -57,6 +57,29 @@ function Page() {
         return game;
     }
 
+    self.startGame = function () {
+        let mode = game.getOption("mode");
+        let skin = game.getOption("skin");
+        if (mode && skin) {
+            page.switchState("game");
+        }
+        if (!mode) {
+            view.showAlert("mode_message");
+        }
+        if (!skin) {
+            view.showAlert("skin_message");
+        }
+    }
+
+    self.switchMode = function (mode) {
+        game.setOption("mode", mode);
+        view.hideAlert("mode_message");
+    }
+
+    self.switchSkin = function (skin) {
+        game.setOption("skin", skin);
+        view.hideAlert("skin_message");
+    }
 
     self.switchState = function (newState) {
         window.location.hash = newState;
@@ -67,7 +90,7 @@ function Page() {
         let state = hash.substring(1);
         if (!state) {
             self.switchState("main_menu");
-        } else if (states.includes(state)) {
+        } else if (states.includes(state)) {//todo game game menu
             currentState = state;
             showState(currentState);
         } else {
@@ -151,24 +174,30 @@ function Page() {
         view.hideLoading(loadingDOM);
     }
 
-    let showState=function (state){
-        switch (state){
+    let showState = function (state) {
+        switch (state) {
             case "main_menu":
             case "game_settings":
             case "options":
             case "controls":
             case "high_scores":
             case "game_menu":
-                menuDOM=menu.createMenu(state);
-                view.showState(currentDOM,menuDOM);
+                menuDOM = menu.createMenu(state);
+                if (currentDOM) {
+                    currentDOM.dispatchEvent(readyToSwitch);
+                }
+                view.showState(currentDOM, menuDOM);
                 menuDOM.dispatchEvent(switchEvent);
-                currentDOM=menuDOM;
+                currentDOM = menuDOM;
                 break;
             case "game":
-                gameDOM=game.createGameDOM();
-                view.showState(currentDOM,gameDOM);
-                gameDOM.dispatchEvent()
-                currentDOM=gameDOM;
+                gameDOM = game.createGameDOM();
+                if (currentDOM) {
+                    currentDOM.dispatchEvent(readyToSwitch);
+                }
+                view.showState(currentDOM, gameDOM);
+                gameDOM.dispatchEvent();
+                currentDOM = gameDOM;
                 break;
         }
     }

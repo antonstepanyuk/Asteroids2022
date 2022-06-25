@@ -26,12 +26,18 @@ function PageView(pageObj, pageContainerDOM) {
         loadingDOM.remove();
     }
 
-    // let prepareWindow=function (){
-    //     pageDOM.append(menuDOM);
-    //     menuDOM.style.display="none";
-    //     pageDOM.append(gameDOM);
-    //     gameDOM.style.display="none";
-    // }
-    //
-    // prepareWindow();
+    self.switchMode=function (elementDOM,className){
+        elementDOM.className=className;
+        // if(className)
+    }
+
+    self.showAlert=function (id){
+        document.getElementById(id).style.opacity="0.8";
+    }
+    self.hideAlert=function (id){
+        document.getElementById(id).style.opacity="0";
+    }
+
+
+
 }
