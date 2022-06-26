@@ -1,4 +1,4 @@
-.menu {
+.menu_window {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -9,14 +9,35 @@
     transform: translate(-50%, -50%);
     z-index: 1;
     border-radius: 10%;
-    box-shadow: 0 0 30px 1px rgba(255, 255, 255, 0.85),inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
     width: 35em;
-    height: 30em;
+    height: 35em;
     padding-top: 6em;
-    padding-bottom:1em ;
+    padding-bottom: 0.5em;
+    animation: windowShine 10s infinite alternate;
 }
 
-.game_name {
+@keyframes windowShine {
+    0% {
+        box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+    20% {
+        box-shadow: 0 0 30px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+    40% {
+        box-shadow: 0 0 20px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+    60% {
+        box-shadow: 0 0 30px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+    80% {
+        box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+    100% {
+        box-shadow: 0 0 20px 1px rgba(255, 255, 255, 0.85), inset 0 0 7px 1px rgba(255, 255, 255, 0.85);
+    }
+}
+
+.logo {
     position: absolute;
     top: 0.5em;
     font-family: 'Train One', cursive;
@@ -24,33 +45,218 @@
     opacity: 1;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.85);
-    text-shadow: 0 0 20px rgb(255, 255, 255);
+    animation: logoShine 10s infinite alternate;
 }
 
-.button {
+@keyframes logoShine {
+    0% {
+        text-shadow: 0 0 15px rgb(255, 255, 255);
+    }
+    20% {
+        text-shadow: 0 0 35px rgb(255, 255, 255);
+    }
+    40% {
+        text-shadow: 0 0 25px rgb(255, 255, 255);
+    }
+    60% {
+        text-shadow: 0 0 35px rgb(255, 255, 255);
+    }
+    80% {
+        text-shadow: 0 0 15px rgb(255, 255, 255);
+    }
+    100% {
+        text-shadow: 0 0 25px rgb(255, 255, 255);
+    }
+}
+
+.menu_section {
+    width: 40%;
+    height: 30em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.menu_section_name {
+    position: absolute;
+    top: 4em;
+    font-family: 'Days One', sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.85);
+    /*animation: nameShine 10s infinite alternate;*/
+}
+
+.main_menu_btn {
     width: 200px;
-    height: 50px;
+    height: 3em;
     cursor: pointer;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 15%;
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7), inset 0 0 5px 2px rgba(255, 255, 255, 0.7);
     transition: 1s ease-in-out;
-}
-
-.button:hover {
-    transition: 1s ease-in-out;
-    background: rgb(15, 44, 73);
-}
-
-.button:active {
-    transition: 0.5s;
-    background: rgb(255, 255, 255);
-}
-
-.button span {
+    animation: buttonShine 3s infinite alternate;
     font-family: 'Days One', sans-serif;
     color: rgba(255, 255, 255, 0.7);
     font-size: 100%;
     font-weight: 400;
+}
+
+@keyframes buttonShine {
+    0% {
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7), inset 0 0 5px 2px rgba(255, 255, 255, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 1px 5px rgba(255, 255, 255, 0.7), inset 0 0 5px 2px rgba(255, 255, 255, 0.7);
+    }
+}
+
+.main_menu_btn:hover {
+    transition: 1s ease-in-out;
+    background: rgb(15, 44, 73);
+}
+
+.main_menu_btn:active {
+    transition: 0.5s;
+    background: rgb(255, 255, 255);
+}
+
+.game_settings_menu_section {
+    width: 90%;
+    height: 35em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.game_settings_name {
+    font-family: 'Days One', sans-serif;
+    font-weight: 400;
+    font-size: 1em;
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.mode_section {
+    width: 100%;
+    height: 17%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2em;
+}
+
+.mode_section div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mode_section div input[type=radio] {
+    display: none;
+}
+
+.mode_section label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 3em;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.7), inset 0 0 5px 2px rgba(255, 255, 255, 0.7);
+    font-family: 'Days One', sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 100%;
+    font-weight: 400;
+}
+
+
+.mode_section input[type=radio]:checked + label {
+    transition: 0.5s;
+    background: rgba(255, 255, 255, 0.5);
+    animation: buttonShine 3s infinite alternate;
+}
+
+.mode_section_btn:hover {
+    transition: 1s ease-in-out;
+    background: rgb(15, 44, 73);
+}
+
+.mode_section_btn:active {
+    transition: 0.5s;
+    background: rgb(255, 255, 255);
+}
+
+.skin_section {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2em;
+}
+
+.skin_section div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.skin_section div input[type=radio] {
+    display: none;
+}
+
+.skin_section label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 130px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 50%;
+    box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.7), inset 0 0 5px 2px rgba(255, 255, 255, 0.7);
+    font-family: 'Days One', sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 100%;
+    font-weight: 400;
+}
+
+
+.skin_section input[type=radio]:checked + label {
+    transition: 0.5s;
+    background: rgba(255, 255, 255, 0.5);
+    animation: buttonShine 3s infinite alternate;
+}
+
+.skin_section_btn:hover {
+    transition: 1s ease-in-out;
+    background: rgb(15, 44, 73);
+}
+
+.skin_section_btn:active {
+    transition: 0.5s;
+    background: rgb(255, 255, 255);
+}
+
+.message{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error{
+    font-size: 1.5em;
+    color: #d52c2c;
 }

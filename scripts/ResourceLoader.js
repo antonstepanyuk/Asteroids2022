@@ -179,7 +179,7 @@ function ResourceLoader() {
     };
 
     self.getImages=function (){
-        return images;
+         return images;
     }
 
     let loadImage = function (src) {

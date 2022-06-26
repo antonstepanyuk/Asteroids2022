@@ -29,7 +29,7 @@ function Page() {
 
     let switchEvent = new Event("state_switched", {bubbles: true});
     let readyToSwitch = new Event("ready_to_switch", {bubbles: true});
-    // let gameEvent= new Event("game_switched", {bubbles: true});
+    let gameStart = new Event("game_start", {bubbles: true});
 
     let states = [//todo is mobile orientation
         "main_menu",//todo start,options,controls,scores,credits,exit
@@ -42,6 +42,10 @@ function Page() {
         //todo PAGE EXITS!!!!!
 
     ];
+
+    self.getPageDOM = function () {
+        return pageDOM;
+    }
 
     self.getCurrentState = function () {
         return currentState;
@@ -90,7 +94,7 @@ function Page() {
         let state = hash.substring(1);
         if (!state) {
             self.switchState("main_menu");
-        } else if (states.includes(state)) {//todo game game menu
+        } else if (states.includes(state)) {//todo game to game menu
             currentState = state;
             showState(currentState);
         } else {
@@ -191,12 +195,15 @@ function Page() {
                 currentDOM = menuDOM;
                 break;
             case "game":
-                gameDOM = game.createGameDOM();
-                if (currentDOM) {
+                gameDOM = game.getGameDOM();
+                if (!currentDOM) {
+                    self.switchState("main_menu");
+                    return;
+                } else {
                     currentDOM.dispatchEvent(readyToSwitch);
                 }
                 view.showState(currentDOM, gameDOM);
-                gameDOM.dispatchEvent();
+                gameDOM.dispatchEvent(gameStart);
                 currentDOM = gameDOM;
                 break;
         }

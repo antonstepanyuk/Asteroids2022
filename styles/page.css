@@ -4,3 +4,45 @@ body, html {
     overflow: hidden;
     background: radial-gradient(ellipse at center, rgb(9, 32, 56) 19%, rgba(1, 4, 6, 1) 100%);
 }
+
+.loading {
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-family: 'Days One', sans-serif;
+    font-size: 5em;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    animation: loadingShine 5s infinite alternate;
+}
+
+@keyframes loadingShine {
+    0% {
+        text-shadow: 0 0 15px rgb(255, 255, 255);
+        font-size: 3em;
+    }
+    20% {
+        text-shadow: 0 0 35px rgb(255, 255, 255);
+        font-size: 2.5em;
+    }
+    40% {
+        text-shadow: 0 0 25px rgb(255, 255, 255);
+        font-size: 2.3em;
+    }
+    60% {
+        text-shadow: 0 0 35px rgb(255, 255, 255);
+        font-size: 2.7em;
+    }
+    80% {
+        text-shadow: 0 0 15px rgb(255, 255, 255);
+        font-size: 3em;
+    }
+    100% {
+        text-shadow: 0 0 25px rgb(255, 255, 255);
+        font-size: 2.5em;
+    }
+}
+

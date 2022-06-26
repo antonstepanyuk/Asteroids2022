@@ -2,14 +2,24 @@
 
 function Game() {
     let self = this;
+    let view = null;
+    let controller = null;
+
 
     let gameDOM = null;
-    let controlsDOM = null;
+    let controlsDOM = null;//todo mobile for gameDOM
     let canvas = null;
     let context = null;
     let asteroids = {};
     let lasers = {};
 
+    let resourceLoader = null;
+    let speed = null;
+    let spaceship = {
+        img: null,
+        x: null,
+        y: null
+    };
     let modeSpeed = {
         easy: 1,
         medium: 2,
@@ -17,18 +27,20 @@ function Game() {
     };
     let options = {
         mode: "",
-        skin:"",
+        skin: "",
         sounds: true,
         music: true,
         vibration: false,
-        fullscreen: false
+        fullscreen: false//todo to PAGE
     };
-    let controls = {
-        accelerate: "w",
-        rotate_left: "a",
-        rotate_right: "d",
-        fire: "space",
-    };
+    // let controls = {
+    //     accelerate: "ArrowUp",
+    //     VM83349:1
+    //     VM83349:1 ArrowLeft
+    //     rotate_left: "ArrowRight",
+    //     rotate_right: "ArrowRight",
+    //     fire: "space",
+    // };
     let elements = {
         game_window: {
             id: "game_window",
@@ -48,6 +60,18 @@ function Game() {
         return gameDOM;
     }
 
+    self.getCanvas=function (){
+        return canvas;
+    }
+
+    self.getContext = function () {
+        return context;
+    }
+
+    self.getSpaceship=function (){
+        return spaceship;
+    }
+
     self.setOption = function (option, value) {
         options[option] = value;
     }
@@ -56,47 +80,98 @@ function Game() {
         return options[option];
     }
 
-
-    // self.updateState = function () {
-    // }
-
-    self.createGameDOM = function () {
+    let createGameDOM = function () {
         gameDOM = document.createElement("div");
         gameDOM.id = elements.game_window.id;
         gameDOM.className = elements.game_window.class;
     }
-    // let createCanvas = function () {
-    //     canvas = document.createElement("canvas");
-    //     canvas.id = "canvas";
-    //     canvas.className = "canvas";
-    //     canvas.width = pageDOM.offsetWidth;
-    //     canvas.height = pageDOM.offsetHeight;
-    // }
-    //
-    // let createContext = function () {
-    //     context = canvas.getContext("2d");
-    // }
+
+    let createCanvas = function () {
+        canvas = document.createElement("canvas");
+        canvas.id = "canvas";
+        canvas.className = "canvas";
+        canvas.width = page.getPageDOM().offsetWidth;
+        canvas.height = page.getPageDOM().offsetHeight;
+    }
+
+    let createContext = function () {
+        context = canvas.getContext("2d");
+    }
+
+    let initializeParameters = function () {
+        resourceLoader = page.getResourceLoaderObj();
+        speed = modeSpeed[options.mode];
+        spaceship.img = resourceLoader.getImages().spaceships.full[options.skin].img;
+        spaceship.x = page.getPageDOM().offsetWidth / 2;
+        spaceship.y = page.getPageDOM().offsetHeight / 2;
+
+    }
 
 
-    // createGameDOM();
-    // createCanvas();
-    // createContext();
+    self.start = function () {
+        initializeParameters();
+
+        view.draw();
+    }
+
+    createGameDOM();
+    createCanvas();
+    createContext();
+    gameDOM.append(canvas);
+    view = new GameView(self, gameDOM);
+    controller = new GameController(self, gameDOM);
 }
 
-// function GameView(gameObj, gameContainerDOM) {
-//     let self = this;
-//     let game = gameObj;
-//     let gameDOM = gameContainerDOM;
-//
-// }
-//
-// function GameController(gameObj, gameContainerDOM) {
-//     let self = this;
-//     let game = gameObj;
-//     let gameDOM = gameContainerDOM;
-//
-//     window.addEventListener("hashchange", game.updateState);
-// }
+function GameView(gameObj, gameContainerDOM) {//todo get from models only models in
+    let self = this;
+    let game = gameObj;
+    let gameDOM = gameContainerDOM;
+    let canvas = null;
+    let context = null;
+    let requestId=null;
+
+    let ship=game.getSpaceship();
+
+    let drawSpaceship=function (){
+        context.drawImage(ship.img,ship.x,ship.y)//todo ,canvas.width/10,canvas.height/10);
+    }
+
+    self.draw = function () {
+        context.clearRect(0, 0, canvas.width,canvas.height);
+        drawSpaceship();
+
+
+        requestId=requestAnimationFrame(self.draw);
+    }
+
+
+
+
+    context = game.getContext();
+    // context.imageSmoothingEnabled=true;
+    // context.imageSmoothingQuality="high";
+    canvas = game.getCanvas();
+}
+
+function GameController(gameObj, gameContainerDOM) {
+    let self = this;
+    let game = gameObj;
+    let gameDOM = gameContainerDOM;
+
+    let keyUpHandler=function (EO){
+
+    }
+
+    let keyDownHandler=function (EO){
+switch (EO.key)
+    }
+
+    document.addEventListener("keyup",keyUpHandler);
+    document.addEventListener("keydown",keyDownHandler);
+//delete game_start!!!!!
+    window.addEventListener("game_start", game.start);//todo gamestop!!!!
+    // window.addEventListener("hashchange", game.updateState);
+}
 
 // // var canvas = document.getElementById("myCanvas");
 // // var ctx = canvas.getContext("2d");
@@ -280,37 +355,12 @@ function Game() {
 //     #currentScore=null;
 //
 //
-//     constructor() {
-//
-//         this.#currentMode="medium";
-//
-//         console.log("готовлюсь к загрузке: space_ship.png")
-//         this.#loadImage(this.#skinSrc)
-//             .then(result => {
-//                         this.#skin = result.value;
-//                     }, reject => console.log(reject))
-//         console.log("отработал конструктор: Game")
-//     }
-//
 //     getCurrentMode(){
 //         return this.#currentMode;
 //     }
 //     // getSkin(){
 //     //     return this.#skin;
 //     // }
-//
-//     #loadImage(src) {
-//         return new Promise(function (resolve, reject) {
-//             console.log("загружаю image " + src)
-//             let image = document.createElement("img");
-//             image.src = src;
-//
-//             image.onload = () => resolve(image);
-//             image.onerror = () => reject(new Error(`Ошибка загрузки изображения ${image}`));
-//
-//             console.log("image загружен " + src)
-//         });
-//     }
 //
 //
 //
